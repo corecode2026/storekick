@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>متجر القناة — Kick</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{--kick:#53FC18;--bg:#0A0A0F;--card:#13131A;--card2:#1C1C26;--border:rgba(83,252,24,0.15);--bw:rgba(255,255,255,0.08);--text:#F0F0F0;--muted:#888;--red:#ff4040;--orange:#FFA500;}
+body{background:var(--bg);color:var(--text);font-family:'Cairo',sans-serif;min-height:100vh;direction:rtl;}
+.green{color:var(--kick);}.hidden{display:none!important;}a{text-decoration:none;}
+
+/* NAV */
+.navbar{display:flex;align-items:center;justify-content:space-between;padding:12px 28px;background:rgba(10,10,15,0.97);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;gap:10px;flex-wrap:wrap;}
+.nav-logo{display:flex;align-items:center;gap:10px;cursor:pointer;}
+.channel-avatar{width:36px;height:36px;border-radius:50%;border:2px solid var(--kick);object-fit:cover;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:18px;overflow:hidden;flex-shrink:0;}
+.channel-avatar img{width:100%;height:100%;object-fit:cover;}
+.kick-badge{background:var(--kick);color:#000;font-weight:900;font-size:11px;padding:2px 7px;border-radius:4px;letter-spacing:1px;}
+.nav-name{font-weight:700;font-size:16px;}
+.nav-links{display:flex;gap:4px;}
+.nav-link{padding:7px 13px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--muted);font-family:'Cairo',sans-serif;transition:all .15s;}
+.nav-link:hover{color:var(--text);background:var(--card2);}
+.nav-link.active{color:#000;background:var(--kick);}
+.nav-right{display:flex;align-items:center;gap:8px;}
+.pts-badge{display:flex;align-items:center;gap:5px;background:var(--card2);border:1px solid var(--border);padding:6px 12px;border-radius:20px;font-size:13px;color:var(--kick);font-weight:700;}
+.login-btn{display:flex;align-items:center;gap:6px;background:var(--kick);color:#000;padding:8px 16px;border-radius:7px;font-weight:700;font-size:13px;cursor:pointer;border:none;font-family:'Cairo',sans-serif;}
+.admin-nav-btn{background:var(--card2);color:var(--muted);border:1px solid var(--bw);padding:7px 13px;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;}
+.admin-nav-btn:hover{color:var(--kick);border-color:var(--border);}
+
+/* LAYOUT */
+.main-container{max-width:940px;margin:0 auto;padding:28px 20px;}
+.page{display:none;}.page.active{display:block;}
+.section-title{font-size:22px;font-weight:900;margin-bottom:20px;}
+.sub-title{font-size:15px;font-weight:700;margin:22px 0 12px;}
+.btn-primary{background:var(--kick);color:#000;padding:10px 22px;border-radius:8px;font-weight:700;font-size:14px;cursor:pointer;border:none;font-family:'Cairo',sans-serif;}
+.btn-secondary{background:transparent;color:var(--text);padding:9px 16px;border-radius:8px;font-weight:600;font-size:13px;cursor:pointer;border:1px solid var(--bw);font-family:'Cairo',sans-serif;}
+.btn-danger{background:rgba(255,64,64,.12);color:var(--red);padding:8px 16px;border-radius:8px;font-weight:700;font-size:13px;cursor:pointer;border:1px solid rgba(255,64,64,.25);font-family:'Cairo',sans-serif;}
+.btn-sm{padding:5px 12px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;border:none;font-family:'Cairo',sans-serif;}
+.btn-edit{background:rgba(83,152,255,.12);color:#5398FF;border:1px solid rgba(83,152,255,.2);}
+.btn-del{background:rgba(255,64,64,.1);color:var(--red);border:1px solid rgba(255,64,64,.2);}
+.btn-done{background:var(--kick);color:#000;}
+.btn-toggle{background:rgba(255,165,0,.1);color:var(--orange);border:1px solid rgba(255,165,0,.2);}
+
+/* HOME */
+.hero{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:40px 36px;margin-bottom:24px;position:relative;overflow:hidden;}
+.hero::after{content:'';position:absolute;top:-60px;right:-60px;width:240px;height:240px;background:radial-gradient(circle,rgba(83,252,24,.07) 0%,transparent 70%);pointer-events:none;}
+.live-dot{display:inline-flex;align-items:center;gap:7px;background:rgba(255,64,64,.1);border:1px solid rgba(255,64,64,.25);color:var(--red);font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;margin-bottom:18px;letter-spacing:1px;}
+.live-dot::before{content:'';width:7px;height:7px;background:var(--red);border-radius:50%;animation:pulse 1.4s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+.hero h1{font-size:30px;font-weight:900;line-height:1.25;margin-bottom:12px;}
+.hero p{color:var(--muted);font-size:14px;line-height:1.7;max-width:480px;margin-bottom:24px;}
+.hero-cta{display:flex;gap:10px;flex-wrap:wrap;}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px;}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center;}
+.stat-num{font-size:26px;font-weight:900;}.stat-label{font-size:12px;color:var(--muted);margin-top:6px;}
+.features-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+.feature-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;}
+.feature-icon{font-size:24px;margin-bottom:10px;}.feature-title{font-size:15px;font-weight:700;margin-bottom:6px;}
+.feature-desc{font-size:13px;color:var(--muted);line-height:1.6;}
+
+/* STORE */
+.store-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px;}
+.product-card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:border-color .2s,transform .15s;display:flex;flex-direction:column;}
+.product-card:hover{border-color:var(--kick);transform:translateY(-3px);}
+.product-img{width:100%;height:160px;object-fit:cover;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:52px;flex-shrink:0;}
+.product-img img{width:100%;height:100%;object-fit:cover;}
+.product-body{padding:16px;display:flex;flex-direction:column;flex:1;}
+.product-name{font-size:15px;font-weight:700;margin-bottom:6px;}
+.product-desc{font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.6;flex:1;}
+.product-price{display:inline-flex;align-items:center;gap:5px;background:rgba(83,252,24,.08);border:1px solid var(--border);color:var(--kick);font-size:13px;font-weight:700;padding:4px 12px;border-radius:20px;margin-bottom:12px;align-self:flex-start;}
+.buy-btn{width:100%;padding:9px;border-radius:8px;background:var(--kick);color:#000;font-weight:700;font-size:13px;cursor:pointer;border:none;font-family:'Cairo',sans-serif;}
+.buy-btn:disabled{background:var(--card2);color:var(--muted);cursor:not-allowed;}
+
+/* RULES */
+.rules-list{display:flex;flex-direction:column;gap:14px;}
+.rule-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 20px;display:flex;gap:14px;align-items:flex-start;}
+.rule-num{width:32px;height:32px;border-radius:50%;background:rgba(83,252,24,.1);border:1px solid var(--border);color:var(--kick);font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.rule-title{font-size:14px;font-weight:700;margin-bottom:5px;}.rule-desc{font-size:13px;color:var(--muted);line-height:1.6;}
+
+/* POINTS */
+.points-hero{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:30px;text-align:center;margin-bottom:28px;}
+.big-points{font-size:56px;font-weight:900;color:var(--kick);line-height:1;}
+.points-label{color:var(--muted);font-size:14px;margin:8px 0 20px;}
+.progress-bar-wrap{background:var(--card2);border-radius:8px;height:10px;overflow:hidden;margin-bottom:8px;}
+.progress-bar{height:100%;border-radius:8px;background:var(--kick);transition:width .6s;}
+.progress-label{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:18px;}
+.history-list{display:flex;flex-direction:column;gap:10px;}
+.history-item{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;}
+.h-info{display:flex;flex-direction:column;}.h-title{font-size:14px;font-weight:600;}.h-time{font-size:12px;color:var(--muted);margin-top:3px;}
+.pts-plus{color:var(--kick);font-size:15px;font-weight:800;}.pts-minus{color:#ff5555;font-size:15px;font-weight:800;}
+
+/* ABOUT */
+.about-hero{display:flex;align-items:center;gap:24px;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:32px;margin-bottom:20px;}
+.about-avatar-big{width:100px;height:100px;border-radius:50%;border:3px solid var(--kick);object-fit:cover;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:44px;overflow:hidden;flex-shrink:0;}
+.about-avatar-big img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.about-tag{font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--kick);margin-bottom:6px;}
+.about-name{font-size:28px;font-weight:900;margin-bottom:6px;}
+.about-handle{font-size:14px;color:var(--muted);}
+.about-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px 28px;margin-bottom:20px;}
+.about-section-label{font-size:15px;font-weight:700;margin-bottom:12px;}
+.about-bio-text{font-size:14px;color:var(--muted);line-height:1.8;}
+.about-info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:20px;}
+.about-info-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;text-align:center;}
+.about-info-icon{font-size:26px;margin-bottom:8px;}.about-info-title{font-size:11px;color:var(--muted);margin-bottom:6px;font-weight:600;}
+.about-info-val{font-size:13px;font-weight:700;}
+.socials-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;}
+.social-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;transition:opacity .15s;}
+.social-btn:hover{opacity:.8;}
+.kick-social{background:var(--kick);color:#000;}.discord-social{background:#5865F2;color:#fff;}
+.twitter-social{background:var(--card2);color:var(--text);border:1px solid var(--bw);}
+.kick-badge-sm{background:#000;color:var(--kick);font-size:10px;font-weight:900;padding:2px 6px;border-radius:3px;letter-spacing:1px;}
+
+/* ADMIN */
+.admin-wrap{display:flex;gap:0;min-height:calc(100vh - 130px);}
+.admin-sidebar{width:210px;flex-shrink:0;background:var(--card);border:1px solid var(--border);border-radius:14px 0 0 14px;padding:20px 0;display:flex;flex-direction:column;}
+.admin-sidebar-top{padding:0 16px 16px;border-bottom:1px solid var(--border);margin-bottom:12px;display:flex;align-items:center;gap:10px;}
+.admin-ava{width:40px;height:40px;border-radius:50%;border:2px solid var(--kick);object-fit:cover;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:20px;overflow:hidden;flex-shrink:0;}
+.admin-ava img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.admin-sidebar-name{font-size:13px;font-weight:700;}.admin-sidebar-role{font-size:11px;color:var(--kick);}
+.admin-menu{display:flex;flex-direction:column;gap:2px;padding:0 8px;flex:1;}
+.admin-menu-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;color:var(--muted);transition:all .15s;border:none;background:transparent;font-family:'Cairo',sans-serif;width:100%;text-align:right;}
+.admin-menu-item:hover{background:var(--card2);color:var(--text);}
+.admin-menu-item.active{background:rgba(83,252,24,.12);color:var(--kick);}
+.menu-icon{font-size:16px;width:20px;text-align:center;}
+.menu-badge{margin-right:auto;background:var(--red);color:#fff;font-size:10px;font-weight:900;padding:1px 7px;border-radius:10px;}
+.admin-sidebar-footer{padding:12px 8px 0;border-top:1px solid var(--border);margin-top:auto;}
+.admin-content{flex:1;background:var(--card2);border:1px solid var(--border);border-right:none;border-radius:0 14px 14px 0;padding:24px;overflow-y:auto;}
+.admin-sub{display:none;}.admin-sub.active{display:block;}
+.admin-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px;}
+.admin-stat{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center;}
+.admin-stat-num{font-size:24px;font-weight:900;color:var(--kick);}.admin-stat-label{font-size:11px;color:var(--muted);margin-top:4px;}
+.data-table{width:100%;border-collapse:collapse;}
+.data-table th{text-align:right;font-size:11px;color:var(--muted);font-weight:700;padding:10px 12px;border-bottom:1px solid var(--border);white-space:nowrap;}
+.data-table td{padding:11px 12px;font-size:13px;border-bottom:1px solid rgba(255,255,255,.04);vertical-align:middle;}
+.data-table tr:last-child td{border-bottom:none;}
+.data-table tr:hover td{background:rgba(255,255,255,.02);}
+.status-badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;}
+.s-pending{background:rgba(255,165,0,.12);color:var(--orange);}
+.s-done{background:rgba(83,252,24,.12);color:var(--kick);}
+.s-off{background:rgba(255,64,64,.1);color:var(--red);}
+.empty-state{text-align:center;padding:50px 20px;color:var(--muted);}
+.empty-state-icon{font-size:42px;margin-bottom:12px;}
+.td-actions{display:flex;gap:6px;align-items:center;}
+
+/* PRODUCT EDIT FORM */
+.product-edit-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+.form-group{display:flex;flex-direction:column;gap:6px;}
+.form-group label{font-size:12px;color:var(--muted);font-weight:600;}
+.form-input{background:var(--card);border:1px solid var(--border);color:var(--text);padding:9px 12px;border-radius:8px;font-size:13px;font-family:'Cairo',sans-serif;}
+.form-input:focus{outline:none;border-color:var(--kick);}
+.img-upload-box{border:2px dashed var(--border);border-radius:10px;padding:20px;text-align:center;cursor:pointer;transition:border-color .2s;position:relative;overflow:hidden;}
+.img-upload-box:hover{border-color:var(--kick);}
+.img-upload-box input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;}
+.img-preview{width:100%;height:140px;object-fit:cover;border-radius:8px;margin-bottom:8px;display:none;}
+.img-preview.show{display:block;}
+.img-placeholder{font-size:32px;margin-bottom:8px;}
+.img-label{font-size:12px;color:var(--muted);}
+.products-admin-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-bottom:20px;}
+.product-admin-card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+.pac-img{width:100%;height:120px;object-fit:cover;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:38px;}
+.pac-img img{width:100%;height:100%;object-fit:cover;}
+.pac-body{padding:12px;}
+.pac-name{font-size:14px;font-weight:700;margin-bottom:4px;}
+.pac-price{font-size:12px;color:var(--kick);font-weight:700;margin-bottom:10px;}
+.pac-actions{display:flex;gap:6px;}
+
+/* CHANNEL SETTINGS IMG */
+.channel-img-upload{display:flex;align-items:center;gap:16px;margin-bottom:16px;}
+.channel-img-preview{width:80px;height:80px;border-radius:50%;border:3px solid var(--border);object-fit:cover;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:32px;overflow:hidden;flex-shrink:0;}
+.channel-img-preview img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.upload-btn-wrap{position:relative;display:inline-block;}
+.upload-btn-wrap input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+
+/* SETTINGS */
+.settings-section{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:22px;margin-bottom:16px;}
+.settings-title{font-size:15px;font-weight:700;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+.setting-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04);gap:12px;}
+.setting-row:last-child{border-bottom:none;padding-bottom:0;}
+.setting-label{font-size:13px;font-weight:600;}.setting-desc{font-size:12px;color:var(--muted);margin-top:2px;}
+.setting-input{background:var(--card2);border:1px solid var(--border);color:var(--text);padding:7px 12px;border-radius:7px;font-size:13px;font-family:'Cairo',sans-serif;min-width:160px;flex-shrink:0;}
+.setting-input:focus{outline:none;border-color:var(--kick);}
+.toggle{position:relative;width:42px;height:22px;flex-shrink:0;}
+.toggle input{opacity:0;width:0;height:0;}
+.toggle-slider{position:absolute;cursor:pointer;inset:0;background:var(--card2);border:1px solid var(--border);border-radius:22px;transition:.3s;}
+.toggle-slider::before{content:'';position:absolute;height:14px;width:14px;right:3px;top:3px;background:var(--muted);border-radius:50%;transition:.3s;}
+.toggle input:checked+.toggle-slider{background:rgba(83,252,24,.2);border-color:var(--kick);}
+.toggle input:checked+.toggle-slider::before{background:var(--kick);transform:translateX(-20px);}
+
+/* CHAT PANEL */
+.chat-panel{display:grid;grid-template-columns:220px 1fr;gap:0;background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;height:480px;}
+.chat-list{border-left:1px solid var(--border);overflow-y:auto;}
+.chat-list-item{padding:12px 14px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.04);transition:background .15s;}
+.chat-list-item:hover{background:var(--card2);}
+.chat-list-item.selected{background:rgba(83,252,24,.06);border-right:3px solid var(--kick);}
+.chat-user-name{font-size:13px;font-weight:700;}.chat-preview{font-size:11px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.chat-unread-dot{display:inline-block;width:8px;height:8px;background:var(--kick);border-radius:50%;margin-left:4px;}
+.chat-view{display:flex;flex-direction:column;}
+.chat-view-head{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+.chat-view-name{font-size:14px;font-weight:700;}.chat-view-sub{font-size:11px;color:var(--muted);}
+.chat-view-msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;}
+.cv-msg{max-width:75%;padding:9px 13px;border-radius:10px;font-size:13px;line-height:1.5;}
+.cv-msg.from-user{background:var(--card2);align-self:flex-start;border-radius:10px 10px 10px 2px;}
+.cv-msg.from-admin{background:var(--kick);color:#000;font-weight:600;align-self:flex-end;border-radius:10px 10px 2px 10px;}
+.chat-view-input{padding:12px;border-top:1px solid var(--border);display:flex;gap:8px;}
+.cv-input{flex:1;background:var(--card2);border:1px solid var(--border);color:var(--text);padding:9px 13px;border-radius:8px;font-size:13px;font-family:'Cairo',sans-serif;}
+.cv-input:focus{outline:none;border-color:var(--kick);}
+.cv-send{background:var(--kick);color:#000;border:none;padding:9px 16px;border-radius:8px;font-weight:700;font-size:13px;cursor:pointer;font-family:'Cairo',sans-serif;}
+.no-chat-sel{display:flex;align-items:center;justify-content:center;flex:1;color:var(--muted);font-size:14px;}
+
+/* MODALS */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);display:flex;align-items:center;justify-content:center;z-index:200;}
+.overlay.hidden{display:none!important;}
+.modal-box{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:32px;max-width:420px;width:92%;text-align:center;}
+.modal-box.wide{max-width:560px;}
+.modal-box h3{font-size:18px;font-weight:800;margin-bottom:8px;}
+.modal-box p{font-size:13px;color:var(--muted);margin-bottom:20px;}
+.modal-input{width:100%;background:var(--card2);border:1px solid var(--border);color:var(--text);padding:10px 14px;border-radius:8px;font-size:14px;font-family:'Cairo',sans-serif;margin-bottom:10px;direction:ltr;text-align:center;}
+.modal-input:focus{outline:none;border-color:var(--kick);}
+.modal-err{color:var(--red);font-size:12px;margin-bottom:10px;min-height:18px;}
+.modal-btns{display:flex;gap:10px;margin-top:8px;}
+.modal-btns button{flex:1;padding:11px;border-radius:8px;font-weight:700;font-size:14px;cursor:pointer;border:none;font-family:'Cairo',sans-serif;}
+.mc{background:var(--kick);color:#000;}.mx{background:var(--card2);color:var(--text);}
+.buy-cost{font-size:24px;font-weight:900;color:var(--kick);margin-bottom:10px;}
+.kick-input-wrap{margin-bottom:16px;text-align:right;}
+.kick-input-wrap label{font-size:13px;color:var(--muted);display:block;margin-bottom:6px;}
+.kick-field{width:100%;background:var(--card2);border:1px solid var(--border);color:var(--text);padding:10px 14px;border-radius:8px;font-size:14px;font-family:'Cairo',sans-serif;direction:ltr;}
+.kick-field:focus{outline:none;border-color:var(--kick);}
+
+/* PRODUCT MODAL */
+.prod-modal-img{width:100%;height:160px;background:var(--card2);border-radius:10px;margin-bottom:14px;display:flex;align-items:center;justify-content:center;font-size:52px;overflow:hidden;position:relative;cursor:pointer;border:2px dashed var(--border);}
+.prod-modal-img img{width:100%;height:100%;object-fit:cover;}
+.prod-modal-img input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;}
+.prod-modal-img-hint{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.6);color:#fff;font-size:11px;padding:3px 10px;border-radius:10px;pointer-events:none;}
+.prod-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;text-align:right;}
+.prod-form-group{display:flex;flex-direction:column;gap:5px;}
+.prod-form-group label{font-size:12px;color:var(--muted);font-weight:600;}
+.prod-form-group.full{grid-column:1/-1;}
+.prod-input{background:var(--card2);border:1px solid var(--border);color:var(--text);padding:9px 12px;border-radius:8px;font-size:13px;font-family:'Cairo',sans-serif;width:100%;}
+.prod-input:focus{outline:none;border-color:var(--kick);}
+
+/* CHAT BUBBLE */
+.chat-bubble{position:fixed;bottom:24px;left:24px;z-index:300;}
+.chat-toggle-btn{width:54px;height:54px;border-radius:50%;background:var(--kick);color:#000;border:none;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(83,252,24,.3);transition:transform .2s;}
+.chat-toggle-btn:hover{transform:scale(1.1);}
+.chat-box{position:absolute;bottom:68px;left:0;width:315px;background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;display:none;box-shadow:0 8px 32px rgba(0,0,0,.5);}
+.chat-box.open{display:block;}
+.chat-head{background:var(--kick);color:#000;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;}
+.chat-head-info{}.chat-head-title{font-weight:700;font-size:14px;}.chat-sub-txt{font-size:11px;opacity:.7;}
+.chat-close-btn{background:none;border:none;font-size:18px;cursor:pointer;color:#000;}
+.chat-name-row{padding:8px 12px;border-bottom:1px solid var(--border);background:rgba(83,252,24,.04);}
+.chat-name-input{width:100%;background:var(--card2);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:7px;font-size:12px;font-family:'Cairo',sans-serif;}
+.chat-name-input:focus{outline:none;border-color:var(--kick);}
+.chat-msgs-area{height:220px;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;}
+.chat-msg{max-width:80%;padding:8px 12px;border-radius:10px;font-size:13px;line-height:1.5;}
+.chat-msg.support{background:var(--card2);align-self:flex-start;border-radius:10px 10px 10px 2px;}
+.chat-msg.user-msg{background:var(--kick);color:#000;align-self:flex-end;border-radius:10px 10px 2px 10px;font-weight:600;}
+.chat-input-area{display:flex;gap:8px;padding:10px 12px;border-top:1px solid var(--border);}
+.chat-input-field{flex:1;background:var(--card2);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:8px;font-size:13px;font-family:'Cairo',sans-serif;}
+.chat-input-field:focus{outline:none;border-color:var(--kick);}
+.chat-send-btn{background:var(--kick);color:#000;border:none;width:36px;height:36px;border-radius:8px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;}
+
+/* TOAST */
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:var(--kick);color:#000;padding:12px 28px;border-radius:30px;font-weight:700;font-size:14px;z-index:500;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;}
+.toast.visible{opacity:1;}
+
+@media(max-width:700px){
+  .navbar{padding:10px 12px;}
+  .hero{padding:22px 16px;}.hero h1{font-size:21px;}
+  .stats-row,.features-grid,.admin-stats,.product-edit-grid,.prod-form-grid{grid-template-columns:1fr;}
+  .store-grid{grid-template-columns:1fr;}
+  .main-container{padding:14px 10px;}
+  .about-hero{flex-direction:column;text-align:center;}
+  .admin-wrap{flex-direction:column;}
+  .admin-sidebar{width:100%;border-radius:14px 14px 0 0;}
+  .admin-content{border-radius:0 0 14px 14px;border-right:1px solid var(--border);border-top:none;}
+  .chat-panel{grid-template-columns:1fr;height:auto;}
+  .chat-list{height:180px;border-left:none;border-bottom:1px solid var(--border);}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="navbar">
+  <div class="nav-logo" onclick="goTo('home',null)">
+    <div class="channel-avatar" id="navAvatar">🎮</div>
+    <span class="kick-badge">KICK</span>
+    <span class="nav-name" id="navName">القناة</span>
+  </div>
+  <div class="nav-links">
+    <button class="nav-link active" onclick="goTo('home',this)">الرئيسية</button>
+    <button class="nav-link" onclick="goTo('about',this)">من أنا</button>
+    <button class="nav-link" onclick="goTo('store',this)">المتجر</button>
+    <button class="nav-link" onclick="goTo('rules',this)">القوانين</button>
+    <button class="nav-link" onclick="goTo('points',this)">النقاط</button>
+  </div>
+  <div class="nav-right">
+    <div id="navPts" class="pts-badge hidden">⭐ <span id="navPtsVal">0</span> نقطة</div>
+    <button class="login-btn" id="loginBtn" onclick="doLogin()">🔐 دخول بـ Kick</button>
+    <button class="login-btn" id="logoutBtn" onclick="doLogout()" style="display:none;background:var(--card2);color:var(--text);border:1px solid var(--bw);">خروج</button>
+    <button class="admin-nav-btn" onclick="openAdminLogin()">⚙️ إدارة</button>
+  </div>
+</nav>
+
+<main class="main-container">
+
+<!-- HOME -->
+<section class="page active" id="page-home">
+  <div class="hero">
+    <div class="live-dot">LIVE</div>
+    <h1>أهلاً بك في<br><span class="green">متجر القناة</span></h1>
+    <p>اكسب نقاط من مشاهدة البث واستبدلها بجوائز ومميزات حصرية على قناتنا بـ Kick!</p>
+    <div class="hero-cta">
+      <button class="btn-primary" onclick="doLogin()">ابدأ واكسب نقاط</button>
+      <button class="btn-secondary" onclick="goTo('store',null)">تصفح المتجر</button>
+    </div>
+  </div>
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-num green">50</div><div class="stat-label">نقطة كل ساعة مشاهدة</div></div>
+    <div class="stat-card"><div class="stat-num green">100</div><div class="stat-label">نقطة ترحيبية</div></div>
+    <div class="stat-card"><div class="stat-num green">∞</div><div class="stat-label">جوائز قابلة للاستبدال</div></div>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card"><div class="feature-icon">⭐</div><div class="feature-title">نقاط الولاء</div><div class="feature-desc">شاهد البث وتفاعل في الشات واكسب نقاط تلقائياً كل ساعة</div></div>
+    <div class="feature-card"><div class="feature-icon">🛒</div><div class="feature-title">المتجر الحصري</div><div class="feature-desc">استبدل نقاطك بمميزات وجوائز حصرية من المتجر</div></div>
+    <div class="feature-card"><div class="feature-icon">🏆</div><div class="feature-title">لوحة المتصدرين</div><div class="feature-desc">تنافس مع بقية المشتركين واحتل المرتبة الأولى</div></div>
+    <div class="feature-card"><div class="feature-icon">🔐</div><div class="feature-title">تسجيل دخول آمن</div><div class="feature-desc">تسجيل دخول مباشر بحسابك على Kick بأمان تام</div></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="page" id="page-about">
+  <div class="about-hero">
+    <div class="about-avatar-big" id="aboutAvatar">🎮</div>
+    <div>
+      <div class="about-tag">الستريمر</div>
+      <h1 class="about-name" id="aboutName">اسم القناة</h1>
+      <p class="about-handle">kick.com/<span class="green" id="aboutHandle">username</span></p>
+    </div>
+  </div>
+  <div class="about-card">
+    <h2 class="about-section-label">🙋 من أنا؟</h2>
+    <p class="about-bio-text" id="aboutBio">أهلاً وسهلاً! أنا ستريمر شغوف بعالم الألعاب والترفيه. قناتي مكان للضحك والتنافس وقضاء أوقات ممتعة مع أحلى كوميونتي.</p>
+  </div>
+  <div class="about-info-grid">
+    <div class="about-info-card"><div class="about-info-icon">🎯</div><div class="about-info-title">التخصص</div><div class="about-info-val" id="aboutSpec">ألعاب FPS</div></div>
+    <div class="about-info-card"><div class="about-info-icon">📅</div><div class="about-info-title">مواعيد البث</div><div class="about-info-val" id="aboutSched">يومياً 8 مساءً</div></div>
+    <div class="about-info-card"><div class="about-info-icon">🌍</div><div class="about-info-title">من وين</div><div class="about-info-val" id="aboutCountry">فلسطين 🇵🇸</div></div>
+    <div class="about-info-card"><div class="about-info-icon">💬</div><div class="about-info-title">لغة البث</div><div class="about-info-val">عربي</div></div>
+  </div>
+  <div class="about-card">
+    <h2 class="about-section-label">🔗 تواصل معي</h2>
+    <div class="socials-row">
+      <a class="social-btn kick-social" id="aboutKickLink" href="#" target="_blank"><span class="kick-badge-sm">KICK</span> <span id="aboutKickTxt">kick.com/username</span></a>
+      <a class="social-btn discord-social" id="aboutDiscord" href="#" target="_blank">💬 Discord</a>
+      <a class="social-btn twitter-social" id="aboutTwitter" href="#" target="_blank">🐦 Twitter / X</a>
+    </div>
+  </div>
+</section>
+
+<!-- STORE -->
+<section class="page" id="page-store">
+  <h2 class="section-title">المتجر <span class="green">الحصري</span></h2>
+  <div class="store-grid" id="storeGrid"></div>
+</section>
+
+<!-- RULES -->
+<section class="page" id="page-rules">
+  <h2 class="section-title"><span class="green">قوانين</span> القناة</h2>
+  <div class="rules-list">
+    <div class="rule-item"><div class="rule-num">1</div><div><div class="rule-title">احترام الجميع</div><div class="rule-desc">يُمنع السب والشتم وإهانة الستريمر أو أي مشترك في الشات.</div></div></div>
+    <div class="rule-item"><div class="rule-num">2</div><div><div class="rule-title">ممنوع السبام</div><div class="rule-desc">لا تكرر نفس الرسالة أكثر من مرتين.</div></div></div>
+    <div class="rule-item"><div class="rule-num">3</div><div><div class="rule-title">لا للإفساد</div><div class="rule-desc">ممنوع كشف تفاصيل الألعاب قبل أن يصلها الستريمر.</div></div></div>
+    <div class="rule-item"><div class="rule-num">4</div><div><div class="rule-title">الدعاية ممنوعة</div><div class="rule-desc">لا تضع روابط لقنوات أخرى دون إذن.</div></div></div>
+    <div class="rule-item"><div class="rule-num">5</div><div><div class="rule-title">كسب النقاط بنزاهة</div><div class="rule-desc">استخدام بوتات أو حسابات وهمية يؤدي إلى حذف الحساب.</div></div></div>
+    <div class="rule-item"><div class="rule-num">6</div><div><div class="rule-title">قرارات المود نهائية</div><div class="rule-desc">احترم قرارات فريق الإشراف.</div></div></div>
+    <div class="rule-item"><div class="rule-num">7</div><div><div class="rule-title">محتوى البالغين ممنوع</div><div class="rule-desc">ممنوع نشر أي محتوى يخالف سياسة Kick.</div></div></div>
+  </div>
+</section>
+
+<!-- POINTS -->
+<section class="page" id="page-points">
+  <h2 class="section-title">نقاطي <span class="green">وسجل الأنشطة</span></h2>
+  <div id="ptsNotLogged" style="text-align:center;padding:60px 0;">
+    <div style="font-size:48px;margin-bottom:16px;">🔒</div>
+    <p style="color:var(--muted);font-size:15px;margin-bottom:22px;">سجّل دخول لترى نقاطك</p>
+    <button class="btn-primary" onclick="doLogin()">سجّل الدخول (تجريبي)</button>
+  </div>
+  <div id="ptsLogged" style="display:none;">
+    <div class="points-hero">
+      <div class="big-points" id="ptsNum">0</div>
+      <div class="points-label">نقطة متاحة للاستبدال</div>
+      <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar" style="width:0%"></div></div>
+      <div class="progress-label"><span>0</span><span>الهدف: 1500 نقطة</span></div>
+    </div>
+    <div class="sub-title">سجل الأنشطة</div>
+    <div class="history-list" id="historyList"></div>
+  </div>
+</section>
+
+<!-- ADMIN -->
+<section class="page" id="page-admin">
+  <div class="admin-wrap">
+    <div class="admin-sidebar">
+      <div class="admin-sidebar-top">
+        <div class="admin-ava" id="adminSideAva">🎮</div>
+        <div><div class="admin-sidebar-name" id="adminSideName">القناة</div><div class="admin-sidebar-role">⚙️ Admin</div></div>
+      </div>
+      <div class="admin-menu">
+        <button class="admin-menu-item active" onclick="adminTab('dashboard',this)"><span class="menu-icon">📊</span> الرئيسية</button>
+        <button class="admin-menu-item" onclick="adminTab('orders',this)"><span class="menu-icon">🛒</span> الطلبات <span class="menu-badge" id="pendingBadge" style="display:none">0</span></button>
+        <button class="admin-menu-item" onclick="adminTab('chats',this)"><span class="menu-icon">💬</span> الدردشات <span class="menu-badge" id="unreadBadge" style="display:none">!</span></button>
+        <button class="admin-menu-item" onclick="adminTab('products',this)"><span class="menu-icon">🎁</span> المنتجات</button>
+        <button class="admin-menu-item" onclick="adminTab('users',this)"><span class="menu-icon">👥</span> المستخدمون</button>
+        <button class="admin-menu-item" onclick="adminTab('settings',this)"><span class="menu-icon">⚙️</span> الإعدادات</button>
+      </div>
+      <div class="admin-sidebar-footer">
+        <button class="btn-danger" onclick="adminLogout()" style="width:100%;font-size:12px;padding:8px;">🚪 تسجيل الخروج</button>
+      </div>
+    </div>
+
+    <div class="admin-content">
+
+      <!-- DASHBOARD -->
+      <div class="admin-sub active" id="asub-dashboard">
+        <div class="sub-title" style="margin-top:0;">📊 نظرة عامة</div>
+        <div class="admin-stats">
+          <div class="admin-stat"><div class="admin-stat-num" id="st-total">0</div><div class="admin-stat-label">إجمالي الطلبات</div></div>
+          <div class="admin-stat"><div class="admin-stat-num" id="st-pending">0</div><div class="admin-stat-label">طلبات معلقة</div></div>
+          <div class="admin-stat"><div class="admin-stat-num" id="st-done">0</div><div class="admin-stat-label">طلبات منجزة</div></div>
+          <div class="admin-stat"><div class="admin-stat-num" id="st-chats">0</div><div class="admin-stat-label">محادثات</div></div>
+        </div>
+        <div class="sub-title">🕐 آخر الطلبات</div>
+        <div id="recentOrders"></div>
+      </div>
+
+      <!-- ORDERS -->
+      <div class="admin-sub" id="asub-orders">
+        <div class="sub-title" style="margin-top:0;">🛒 إدارة الطلبات</div>
+        <div id="ordersTable"></div>
+      </div>
+
+      <!-- CHATS -->
+      <div class="admin-sub" id="asub-chats">
+        <div class="sub-title" style="margin-top:0;">💬 دردشات الزبائن</div>
+        <div class="chat-panel">
+          <div class="chat-list" id="adminChatList"><div style="padding:20px;text-align:center;color:var(--muted);font-size:13px;">لا توجد محادثات بعد</div></div>
+          <div class="chat-view" id="adminChatView"><div class="no-chat-sel">اختر محادثة 👈</div></div>
+        </div>
+      </div>
+
+      <!-- PRODUCTS -->
+      <div class="admin-sub" id="asub-products">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+          <div class="sub-title" style="margin:0;">🎁 إدارة المنتجات</div>
+          <button class="btn-primary" style="font-size:13px;padding:8px 16px;" onclick="openProductModal(null)">+ إضافة منتج</button>
+        </div>
+        <div class="products-admin-grid" id="productsAdminGrid"></div>
+      </div>
+
+      <!-- USERS -->
+      <div class="admin-sub" id="asub-users">
+        <div class="sub-title" style="margin-top:0;">👥 المستخدمون</div>
+
+        <!-- إضافة نقاط يدوياً -->
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:20px;">
+          <div style="font-size:15px;font-weight:700;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border);">⭐ إضافة نقاط يدوياً</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:end;">
+            <div>
+              <div style="font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:600;">اسم المستخدم على Kick</div>
+              <input class="prod-input" id="manualPtsUser" placeholder="KickUsername" dir="ltr" style="width:100%;"/>
+            </div>
+            <div>
+              <div style="font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:600;">عدد النقاط</div>
+              <input class="prod-input" id="manualPtsAmount" type="number" placeholder="3893" dir="ltr" style="width:100%;"/>
+            </div>
+            <button class="btn-primary" onclick="addManualPoints()" style="height:38px;white-space:nowrap;padding:0 16px;">إضافة ⭐</button>
+          </div>
+          <div style="font-size:12px;color:var(--muted);margin-top:10px;">💡 لو المستخدم مش مسجّل بعد، بتنشأ له حساب تلقائياً بمجرد ما يسجل دخوله</div>
+        </div>
+
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:20px;" id="manualPtsLogWrap" style="display:none;">
+          <div style="font-size:14px;font-weight:700;margin-bottom:12px;">📋 سجل الإضافات اليدوية</div>
+          <div id="manualPtsLog"></div>
+        </div>
+
+        <div id="usersTable"></div>
+      </div>
+
+      <!-- SETTINGS -->
+      <div class="admin-sub" id="asub-settings">
+        <div class="sub-title" style="margin-top:0;">⚙️ إعدادات الموقع</div>
+
+        <div class="settings-section">
+          <div class="settings-title">🖼️ صورة القناة</div>
+          <div class="channel-img-upload">
+            <div class="channel-img-preview" id="settingAvaPreview">🎮</div>
+            <div>
+              <div style="font-size:13px;font-weight:600;margin-bottom:6px;">صورة الملف الشخصي</div>
+              <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">تظهر في الـ Nav وصفحة من أنا</div>
+              <div class="upload-btn-wrap">
+                <button class="btn-secondary" style="font-size:12px;padding:7px 14px;">📁 رفع صورة</button>
+                <input type="file" accept="image/*" onchange="handleChannelImg(event)" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="settings-title">🏪 إعدادات القناة</div>
+          <div class="setting-row">
+            <div><div class="setting-label">اسم القناة</div></div>
+            <input class="setting-input" id="set-name" value="القناة" />
+          </div>
+          <div class="setting-row">
+            <div><div class="setting-label">يوزرنيم Kick</div></div>
+            <input class="setting-input" id="set-kick" value="username" dir="ltr" />
+          </div>
+          <div class="setting-row">
+            <div><div class="setting-label">البايو (من أنا)</div></div>
+            <input class="setting-input" id="set-bio" value="أهلاً! أنا ستريمر شغوف..." style="min-width:220px;" />
+          </div>
+          <div class="setting-row">
+            <div><div class="setting-label">التخصص</div></div>
+            <input class="setting-input" id="set-spec" value="ألعاب FPS" />
+          </div>
+          <div class="setting-row">
+            <div><div class="setting-label">مواعيد البث</div></div>
+            <input class="setting-input" id="set-sched" value="يومياً 8 مساءً" />
+          </div>
+          <div class="setting-row">
+            <div><div class="setting-label">البلد</div></div>
+            <input class="setting-input" id="set-country" value="فلسطين 🇵🇸" />
+          </div>
+          <div class="setting-row">
+            <div><div class="setting-label">رابط Discord</div></div>
+            <input class="setting-input" id="set-discord" value="#" dir="ltr" />
+          </div>
+          <div class="setting-row">
+            <div><div class="setting-label">رابط Twitter</div></div>
+            <input class="setting-input" id="set-twitter" value="#" dir="ltr" />
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="settings-title">⭐ إعدادات النقاط</div>
+          <div class="setting-row">
+            <div><div class="setting-label">نقاط الترحيب</div><div class="setting-desc">عند أول تسجيل دخول</div></div>
+            <input class="setting-input" id="set-welcome-pts" value="100" type="number" dir="ltr" />
+          </div>
+          <div class="setting-row">
+            <div><div class="setting-label">نقاط المشاهدة</div><div class="setting-desc">كل ساعة مشاهدة</div></div>
+            <input class="setting-input" id="set-watch-pts" value="50" type="number" dir="ltr" />
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="settings-title">🔐 تغيير كلمة سر الإدارة</div>
+          <div class="setting-row">
+            <div><div class="setting-label">كلمة السر الجديدة</div></div>
+            <input class="setting-input" id="set-newpass" type="password" placeholder="••••••" dir="ltr" />
+          </div>
+          <div class="setting-row">
+            <div><div class="setting-label">تأكيد كلمة السر</div></div>
+            <input class="setting-input" id="set-confirmpass" type="password" placeholder="••••••" dir="ltr" />
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="settings-title">🔔 الحالة والتفعيل</div>
+          <div class="setting-row">
+            <div><div class="setting-label">تفعيل المتجر</div></div>
+            <label class="toggle"><input type="checkbox" id="tog-store" checked /><span class="toggle-slider"></span></label>
+          </div>
+          <div class="setting-row">
+            <div><div class="setting-label">تفعيل الدردشة</div></div>
+            <label class="toggle"><input type="checkbox" id="tog-chat" checked /><span class="toggle-slider"></span></label>
+          </div>
+        </div>
+
+        <button class="btn-primary" onclick="saveSettings()">💾 حفظ كل الإعدادات</button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ADMIN LOGIN MODAL -->
+<div class="overlay hidden" id="adminModal">
+  <div class="modal-box">
+    <h3>🔐 دخول الإدارة</h3>
+    <p>أدخل بيانات المدير</p>
+    <input class="modal-input" id="aUser" placeholder="اسم المستخدم" />
+    <input class="modal-input" id="aPass" type="password" placeholder="كلمة المرور" />
+    <div class="modal-err" id="aErr"></div>
+    <div class="modal-btns">
+      <button class="mc" onclick="submitAdmin()">دخول</button>
+      <button class="mx" onclick="closeOverlay('adminModal')">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<!-- BUY MODAL -->
+<div class="overlay hidden" id="buyModal">
+  <div class="modal-box">
+    <h3 id="buyTitle">تأكيد الشراء</h3>
+    <p id="buyDesc" style="color:var(--muted);font-size:13px;margin-bottom:10px;"></p>
+    <div class="buy-cost" id="buyCost"></div>
+    <div class="kick-input-wrap">
+      <label>اسم حسابك على Kick</label>
+      <input class="kick-field" id="kickName" placeholder="YourKickName" />
+    </div>
+    <div class="modal-btns">
+      <button class="mc" onclick="confirmBuy()">تأكيد الشراء ✅</button>
+      <button class="mx" onclick="closeOverlay('buyModal')">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<!-- PRODUCT MODAL -->
+<div class="overlay hidden" id="productModal">
+  <div class="modal-box wide" style="text-align:right;">
+    <h3 id="prodModalTitle" style="margin-bottom:16px;">➕ إضافة منتج</h3>
+
+    <div class="prod-modal-img" id="prodImgBox" onclick="document.getElementById('prodImgFile').click()">
+      <span id="prodImgEmoji" style="font-size:52px;">🎁</span>
+      <img id="prodImgPreview" src="" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" />
+      <input type="file" id="prodImgFile" accept="image/*" style="display:none;" onchange="handleProdImg(event)" />
+      <div class="prod-modal-img-hint">📁 انقر لرفع صورة</div>
+    </div>
+
+    <div class="prod-form-grid">
+      <div class="prod-form-group">
+        <label>اسم المنتج</label>
+        <input class="prod-input" id="prod-name" placeholder="مثال: دور في لعبة" />
+      </div>
+      <div class="prod-form-group">
+        <label>السعر بالنقاط</label>
+        <input class="prod-input" id="prod-price" type="number" placeholder="500" dir="ltr" />
+      </div>
+      <div class="prod-form-group">
+        <label>الأيقونة (إيموجي)</label>
+        <input class="prod-input" id="prod-icon" placeholder="🎮" style="font-size:22px;text-align:center;" />
+      </div>
+      <div class="prod-form-group">
+        <label>الحالة</label>
+        <select class="prod-input" id="prod-active">
+          <option value="true">✅ نشط</option>
+          <option value="false">⏸ موقوف</option>
+        </select>
+      </div>
+      <div class="prod-form-group full">
+        <label>الوصف</label>
+        <textarea class="prod-input" id="prod-desc" rows="2" placeholder="وصف المنتج..." style="resize:vertical;"></textarea>
+      </div>
+    </div>
+
+    <div class="modal-btns">
+      <button class="mc" onclick="saveProduct()">💾 حفظ المنتج</button>
+      <button class="mx" onclick="closeOverlay('productModal')">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<!-- CHAT BUBBLE -->
+<div class="chat-bubble" id="chatBubble">
+  <div class="chat-box" id="chatBox">
+    <div class="chat-head">
+      <div class="chat-head-info">
+        <div class="chat-head-title">💬 تواصل مع الدعم</div>
+        <div class="chat-sub-txt">عادةً نرد خلال دقائق</div>
+      </div>
+      <button class="chat-close-btn" onclick="toggleChat()">✕</button>
+    </div>
+    <div class="chat-name-row">
+      <input class="chat-name-input" id="chatSenderName" placeholder="اسمك على Kick (اختياري)" />
+    </div>
+    <div class="chat-msgs-area" id="chatMsgsArea">
+      <div class="chat-msg support">أهلاً! كيف أقدر أساعدك؟ 👋</div>
+      <div class="chat-msg support">اكتب رسالتك وبنرد عليك في أقرب وقت 😊</div>
+    </div>
+    <div class="chat-input-area">
+      <input class="chat-input-field" id="chatInput" placeholder="اكتب رسالتك..." onkeydown="if(event.key==='Enter')sendChat()" />
+      <button class="chat-send-btn" onclick="sendChat()">➤</button>
+    </div>
+  </div>
+  <button class="chat-toggle-btn" onclick="toggleChat()">💬</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== STATE =====
+let PRODUCTS = [
+  {id:1,icon:'🎮',name:'دور في لعبة',desc:'الستريمر يلعبك معه بدور كامل في اللعبة القادمة',price:500,active:true,img:null},
+  {id:2,icon:'💎',name:'VIP في الشات',desc:'بادج حصري وأولوية في الشات لمدة 30 يوم',price:800,active:true,img:null},
+  {id:3,icon:'🎤',name:'شاؤت آوت',desc:'الستريمر يذكر اسمك على الهواء أمام الجميع',price:300,active:true,img:null},
+  {id:4,icon:'🏆',name:'بطاقة المشجع',desc:'اسمك يظهر في قائمة أبطال القناة بشكل دائم',price:1200,active:true,img:null},
+  {id:5,icon:'🎲',name:'تحدي عشوائي',desc:'اختار تحدياً للستريمر يلزم ينفذه في البث',price:400,active:true,img:null},
+  {id:6,icon:'🌟',name:'عنوان مخصص',desc:'عنوان شخصي مميز بجانب اسمك في الشات',price:600,active:true,img:null},
+];
+
+let orders=[], chats={}, users=[];
+let user=null, adminIn=false, adminPass='admin';
+let pendingProd=null, editingProdId=null;
+let chatOpen=false, selectedChat=null;
+let channelImg=null, pendingProdImg=null;
+
+// ===== NAV =====
+function goTo(id,btn){
+  if(id==='admin'&&!adminIn){openAdminLogin();return;}
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(b=>b&&b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  if(btn) btn.classList.add('active');
+  if(id==='store') renderStore();
+  if(id==='points') renderPoints();
+  if(id==='admin') renderAdminDashboard();
+}
+
+// ===== AUTH =====
+function doLogin(){
+  const name='KickUser_'+Math.floor(Math.random()*9000+1000);
+  user={username:name,points:750,history:[
+    {type:'earned',title:'🎉 نقاط ترحيبية',pts:100,time:'منذ لحظة'},
+    {type:'earned',title:'📺 مشاهدة ساعة',pts:50,time:'منذ ساعة'},
+  ]};
+  users.push({username:name,points:750,joined:new Date().toLocaleString('ar')});
+  document.getElementById('loginBtn').style.display='none';
+  document.getElementById('logoutBtn').style.display='flex';
+  document.getElementById('navPts').classList.remove('hidden');
+  document.getElementById('navPtsVal').textContent=user.points;
+  renderStore();
+  toast('أهلاً '+name+'! 🎉');
+}
+function doLogout(){
+  user=null;
+  document.getElementById('loginBtn').style.display='flex';
+  document.getElementById('logoutBtn').style.display='none';
+  document.getElementById('navPts').classList.add('hidden');
+  renderStore();
+}
+
+// ===== CHANNEL IMAGE =====
+function handleChannelImg(e){
+  const file=e.target.files[0];
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    channelImg=ev.target.result;
+    updateChannelAvatar();
+    toast('✅ تم رفع صورة القناة');
+  };
+  reader.readAsDataURL(file);
+}
+
+function updateChannelAvatar(){
+  if(!channelImg) return;
+  // Nav
+  const navAva=document.getElementById('navAvatar');
+  navAva.innerHTML=`<img src="${channelImg}" alt="avatar"/>`;
+  // About page
+  const aboutAva=document.getElementById('aboutAvatar');
+  aboutAva.innerHTML=`<img src="${channelImg}" alt="avatar"/>`;
+  // Admin sidebar
+  const adminAva=document.getElementById('adminSideAva');
+  adminAva.innerHTML=`<img src="${channelImg}" alt="avatar"/>`;
+  // Settings preview
+  const settAva=document.getElementById('settingAvaPreview');
+  settAva.innerHTML=`<img src="${channelImg}" alt="avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"/>`;
+}
+
+// ===== STORE =====
+function renderStore(){
+  const g=document.getElementById('storeGrid');
+  const active=PRODUCTS.filter(p=>p.active);
+  if(active.length===0){g.innerHTML='<p style="color:var(--muted);text-align:center;padding:40px;grid-column:1/-1;">لا توجد منتجات متاحة حالياً</p>';return;}
+  g.innerHTML=active.map(p=>{
+    const can=user&&user.points>=p.price;
+    const imgHtml=p.img
+      ?`<div class="product-img"><img src="${p.img}" alt="${p.name}"/></div>`
+      :`<div class="product-img" style="font-size:52px;">${p.icon}</div>`;
+    return `<div class="product-card">
+      ${imgHtml}
+      <div class="product-body">
+        <div class="product-name">${p.name}</div>
+        <div class="product-desc">${p.desc}</div>
+        <div class="product-price">⭐ ${p.price.toLocaleString()} نقطة</div>
+        <button class="buy-btn" ${!can?'disabled':''} onclick="openBuy(${p.id})">
+          ${!user?'سجّل دخول أولاً':!can?'نقاط غير كافية':'استبدال الآن'}
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ===== BUY =====
+function openBuy(id){
+  if(!user)return;
+  pendingProd=PRODUCTS.find(p=>p.id===id);
+  document.getElementById('buyTitle').textContent=pendingProd.name;
+  document.getElementById('buyDesc').textContent=pendingProd.desc;
+  document.getElementById('buyCost').textContent=pendingProd.price.toLocaleString()+' نقطة';
+  document.getElementById('kickName').value='';
+  document.getElementById('buyModal').classList.remove('hidden');
+}
+function confirmBuy(){
+  if(!pendingProd||!user)return;
+  const kn=document.getElementById('kickName').value.trim();
+  if(!kn){toast('أدخل اسمك على Kick','err');return;}
+  user.points-=pendingProd.price;
+  document.getElementById('navPtsVal').textContent=user.points;
+  orders.unshift({id:Date.now(),kickName:kn,product:pendingProd.name,icon:pendingProd.icon,price:pendingProd.price,date:new Date().toLocaleString('ar'),status:'pending'});
+  user.history.unshift({type:'spent',title:'🛒 شراء: '+pendingProd.name,pts:-pendingProd.price,time:'الآن'});
+  updateBadges();
+  closeOverlay('buyModal');
+  renderStore();
+  if(document.getElementById('page-points').classList.contains('active')) renderPoints();
+  toast('✅ تم الطلب! سيتم التواصل معك قريباً');
+}
+
+// ===== POINTS =====
+function renderPoints(){
+  if(!user){document.getElementById('ptsNotLogged').style.display='block';document.getElementById('ptsLogged').style.display='none';return;}
+  document.getElementById('ptsNotLogged').style.display='none';
+  document.getElementById('ptsLogged').style.display='block';
+  document.getElementById('ptsNum').textContent=user.points.toLocaleString();
+  document.getElementById('progressBar').style.width=Math.min((user.points/1500)*100,100)+'%';
+  document.getElementById('historyList').innerHTML=user.history.map(h=>`
+    <div class="history-item">
+      <div class="h-info"><span class="h-title">${h.title}</span><span class="h-time">${h.time}</span></div>
+      <span class="${h.type==='earned'?'pts-plus':'pts-minus'}">${h.type==='earned'?'+':''}${h.pts} نق</span>
+    </div>`).join('');
+}
+
+// ===== ADMIN =====
+function openAdminLogin(){document.getElementById('aUser').value='';document.getElementById('aPass').value='';document.getElementById('aErr').textContent='';document.getElementById('adminModal').classList.remove('hidden');}
+function submitAdmin(){
+  const u=document.getElementById('aUser').value.trim(),p=document.getElementById('aPass').value.trim();
+  if(u==='admin'&&p===adminPass){adminIn=true;closeOverlay('adminModal');goTo('admin',null);toast('أهلاً بك في لوحة الإدارة 🛡️');}
+  else document.getElementById('aErr').textContent='❌ بيانات خاطئة';
+}
+function adminLogout(){adminIn=false;goTo('home',document.querySelector('.nav-link'));toast('تم تسجيل خروجك من الإدارة');}
+
+function adminTab(tab,btn){
+  document.querySelectorAll('.admin-sub').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.admin-menu-item').forEach(b=>b.classList.remove('active'));
+  document.getElementById('asub-'+tab).classList.add('active');
+  if(btn) btn.classList.add('active');
+  if(tab==='dashboard') renderAdminDashboard();
+  if(tab==='orders') renderOrdersTable();
+  if(tab==='chats') renderAdminChats();
+  if(tab==='products') renderProductsAdmin();
+  if(tab==='users') renderUsersTable();
+}
+
+function updateBadges(){
+  const n=orders.filter(o=>o.status==='pending').length;
+  const pb=document.getElementById('pendingBadge');
+  pb.textContent=n;pb.style.display=n?'inline':'none';
+  document.getElementById('st-total').textContent=orders.length;
+  document.getElementById('st-pending').textContent=n;
+  document.getElementById('st-done').textContent=orders.filter(o=>o.status==='done').length;
+  document.getElementById('st-chats').textContent=Object.keys(chats).length;
+}
+
+function renderAdminDashboard(){
+  updateBadges();
+  const rec=document.getElementById('recentOrders');
+  if(!orders.length){rec.innerHTML='<div class="empty-state"><div class="empty-state-icon">🛒</div><p>لا توجد طلبات بعد</p></div>';return;}
+  rec.innerHTML=`<table class="data-table"><thead><tr><th>اسم Kick</th><th>المنتج</th><th>التاريخ</th><th>الحالة</th></tr></thead><tbody>
+    ${orders.slice(0,5).map(o=>`<tr>
+      <td><a href="https://kick.com/${o.kickName}" target="_blank" style="color:var(--kick);font-weight:700;">${o.kickName}</a></td>
+      <td>${o.icon} ${o.product}</td>
+      <td style="color:var(--muted);font-size:12px;">${o.date}</td>
+      <td><span class="status-badge ${o.status==='pending'?'s-pending':'s-done'}">${o.status==='pending'?'⏳ معلق':'✅ منجز'}</span></td>
+    </tr>`).join('')}
+  </tbody></table>`;
+}
+
+function renderOrdersTable(){
+  updateBadges();
+  const w=document.getElementById('ordersTable');
+  if(!orders.length){w.innerHTML='<div class="empty-state"><div class="empty-state-icon">🛒</div><p>لا توجد طلبات بعد</p></div>';return;}
+  w.innerHTML=`<table class="data-table"><thead><tr><th>#</th><th>اسم Kick</th><th>المنتج</th><th>السعر</th><th>التاريخ</th><th>الحالة</th><th>إجراء</th></tr></thead><tbody>
+    ${orders.map((o,i)=>`<tr>
+      <td style="color:var(--muted);font-size:12px;">${orders.length-i}</td>
+      <td><a href="https://kick.com/${o.kickName}" target="_blank" style="color:var(--kick);font-weight:700;">${o.kickName}</a></td>
+      <td>${o.icon} ${o.product}</td>
+      <td style="color:var(--kick);font-weight:700;">${o.price.toLocaleString()} نق</td>
+      <td style="color:var(--muted);font-size:12px;">${o.date}</td>
+      <td><span class="status-badge ${o.status==='pending'?'s-pending':'s-done'}">${o.status==='pending'?'⏳ معلق':'✅ منجز'}</span></td>
+      <td><div class="td-actions">
+        ${o.status==='pending'?`<button class="btn-sm btn-done" onclick="markDone(${o.id})">✓ تم</button>`:''}
+        <button class="btn-sm btn-del" onclick="delOrder(${o.id})">🗑</button>
+      </div></td>
+    </tr>`).join('')}
+  </tbody></table>`;
+}
+function markDone(id){const o=orders.find(x=>x.id===id);if(o){o.status='done';renderOrdersTable();updateBadges();toast('✅ تم تحديث الطلب');}}
+function delOrder(id){orders=orders.filter(x=>x.id!==id);renderOrdersTable();updateBadges();toast('تم حذف الطلب');}
+
+// ===== ADMIN CHATS =====
+function renderAdminChats(){
+  const list=document.getElementById('adminChatList');
+  const keys=Object.keys(chats);
+  if(!keys.length){list.innerHTML='<div style="padding:20px;text-align:center;color:var(--muted);font-size:13px;">لا توجد محادثات بعد</div>';return;}
+  list.innerHTML=keys.map(name=>{
+    const msgs=chats[name],last=msgs[msgs.length-1];
+    const unread=msgs.some(m=>m.from==='user'&&!m.read);
+    return `<div class="chat-list-item ${selectedChat===name?'selected':''}" onclick="selectAdminChat('${name}')">
+      <div class="chat-user-name">${name}${unread?'<span class="chat-unread-dot"></span>':''}</div>
+      <div class="chat-preview">${last?last.text:''}</div>
+    </div>`;
+  }).join('');
+}
+function selectAdminChat(name){
+  selectedChat=name;
+  if(chats[name]) chats[name].forEach(m=>{if(m.from==='user')m.read=true;});
+  renderAdminChats();
+  const view=document.getElementById('adminChatView');
+  const msgs=chats[name]||[];
+  view.innerHTML=`
+    <div class="chat-view-head">
+      <div><div class="chat-view-name">${name}</div>
+      <div class="chat-view-sub"><a href="https://kick.com/${name}" target="_blank" style="color:var(--kick);">kick.com/${name}</a></div></div>
+    </div>
+    <div class="chat-view-msgs" id="adminMsgs">
+      ${msgs.map(m=>`<div class="cv-msg ${m.from==='admin'?'from-admin':'from-user'}">${m.text}</div>`).join('')}
+    </div>
+    <div class="chat-view-input">
+      <input class="cv-input" id="adminReplyInp" placeholder="رد على ${name}..." onkeydown="if(event.key==='Enter')adminReply('${name}')" />
+      <button class="cv-send" onclick="adminReply('${name}')">إرسال</button>
+    </div>`;
+  const el=document.getElementById('adminMsgs');
+  if(el) el.scrollTop=el.scrollHeight;
+}
+function adminReply(name){
+  const inp=document.getElementById('adminReplyInp');
+  const txt=inp.value.trim();if(!txt)return;
+  if(!chats[name])chats[name]=[];
+  chats[name].push({from:'admin',text:txt,time:new Date().toLocaleTimeString('ar'),read:true});
+  inp.value='';
+  selectAdminChat(name);
+}
+
+// ===== PRODUCTS ADMIN =====
+function renderProductsAdmin(){
+  const g=document.getElementById('productsAdminGrid');
+  g.innerHTML=PRODUCTS.map(p=>{
+    const imgHtml=p.img?`<div class="pac-img"><img src="${p.img}" alt="${p.name}"/></div>`:`<div class="pac-img">${p.icon}</div>`;
+    return `<div class="product-admin-card">
+      ${imgHtml}
+      <div class="pac-body">
+        <div class="pac-name">${p.name}</div>
+        <div class="pac-price">⭐ ${p.price.toLocaleString()} نقطة · <span class="${p.active?'':''}${!p.active?'':''}">
+          <span class="status-badge ${p.active?'s-done':'s-off'}">${p.active?'نشط':'موقوف'}</span>
+        </span></div>
+        <div class="pac-actions">
+          <button class="btn-sm btn-edit" onclick="openProductModal(${p.id})">✏️ تعديل</button>
+          <button class="btn-sm btn-toggle" onclick="toggleProduct(${p.id})">${p.active?'⏸ إيقاف':'▶ تفعيل'}</button>
+          <button class="btn-sm btn-del" onclick="deleteProduct(${p.id})">🗑</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openProductModal(id){
+  editingProdId=id;
+  pendingProdImg=null;
+  const isEdit=id!==null;
+  const p=isEdit?PRODUCTS.find(x=>x.id===id):null;
+  document.getElementById('prodModalTitle').textContent=isEdit?'✏️ تعديل المنتج':'➕ إضافة منتج جديد';
+  document.getElementById('prod-name').value=p?p.name:'';
+  document.getElementById('prod-price').value=p?p.price:'';
+  document.getElementById('prod-icon').value=p?p.icon:'🎁';
+  document.getElementById('prod-desc').value=p?p.desc:'';
+  document.getElementById('prod-active').value=p?String(p.active):'true';
+  // reset image
+  document.getElementById('prodImgEmoji').style.display='block';
+  document.getElementById('prodImgEmoji').textContent=p?p.icon:'🎁';
+  const prevImg=document.getElementById('prodImgPreview');
+  if(p&&p.img){prevImg.src=p.img;prevImg.style.display='block';document.getElementById('prodImgEmoji').style.display='none';}
+  else{prevImg.src='';prevImg.style.display='none';}
+  document.getElementById('productModal').classList.remove('hidden');
+}
+
+function handleProdImg(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    pendingProdImg=ev.target.result;
+    document.getElementById('prodImgPreview').src=ev.target.result;
+    document.getElementById('prodImgPreview').style.display='block';
+    document.getElementById('prodImgEmoji').style.display='none';
+  };
+  reader.readAsDataURL(file);
+}
+
+function saveProduct(){
+  const name=document.getElementById('prod-name').value.trim();
+  const price=parseInt(document.getElementById('prod-price').value);
+  const icon=document.getElementById('prod-icon').value.trim()||'🎁';
+  const desc=document.getElementById('prod-desc').value.trim();
+  const active=document.getElementById('prod-active').value==='true';
+  if(!name||!price){toast('أدخل الاسم والسعر على الأقل','err');return;}
+  if(editingProdId!==null){
+    const p=PRODUCTS.find(x=>x.id===editingProdId);
+    if(p){Object.assign(p,{name,price,icon,desc,active});if(pendingProdImg)p.img=pendingProdImg;}
+    toast('✅ تم تعديل المنتج');
+  } else {
+    PRODUCTS.push({id:Date.now(),icon,name,desc,price,active,img:pendingProdImg||null});
+    toast('✅ تم إضافة المنتج');
+  }
+  closeOverlay('productModal');
+  renderProductsAdmin();
+  renderStore();
+}
+
+function toggleProduct(id){const p=PRODUCTS.find(x=>x.id===id);if(p){p.active=!p.active;renderProductsAdmin();renderStore();toast(p.active?'✅ تم تفعيل المنتج':'⏸ تم إيقاف المنتج');}}
+function deleteProduct(id){if(!confirm('هل أنت متأكد من حذف المنتج؟'))return;PRODUCTS=PRODUCTS.filter(x=>x.id!==id);renderProductsAdmin();renderStore();toast('تم حذف المنتج');}
+
+// ===== USERS =====
+// ===== MANUAL POINTS =====
+let manualPtsLog = [];
+// قائمة انتظار للمستخدمين اللي ما سجلوا بعد
+let pendingPoints = {}; // { username: points }
+
+function addManualPoints(){
+  const username = document.getElementById('manualPtsUser').value.trim();
+  const amount   = parseInt(document.getElementById('manualPtsAmount').value);
+
+  if(!username){ toast('أدخل اسم المستخدم','err'); return; }
+  if(!amount || amount <= 0){ toast('أدخل عدد نقاط صحيح','err'); return; }
+
+  // ابحث عن المستخدم في القائمة
+  const existingUser = users.find(u => u.username.toLowerCase() === username.toLowerCase());
+
+  if(existingUser){
+    // المستخدم موجود — أضف النقاط مباشرة
+    existingUser.points += amount;
+    toast('✅ تمت إضافة ' + amount.toLocaleString() + ' نقطة لـ ' + username);
+  } else {
+    // المستخدم ما سجّل بعد — احفظها في الانتظار
+    if(!pendingPoints[username]) pendingPoints[username] = 0;
+    pendingPoints[username] += amount;
+    toast('⏳ تم حفظ ' + amount.toLocaleString() + ' نقطة لـ ' + username + ' — ستُضاف عند تسجيل دخوله');
+  }
+
+  // أضف للسجل
+  manualPtsLog.unshift({
+    username,
+    amount,
+    date: new Date().toLocaleString('ar'),
+    status: existingUser ? 'تمت' : 'انتظار تسجيل الدخول'
+  });
+
+  document.getElementById('manualPtsUser').value  = '';
+  document.getElementById('manualPtsAmount').value = '';
+
+  renderManualPtsLog();
+  renderUsersTable();
+}
+
+function renderManualPtsLog(){
+  const wrap = document.getElementById('manualPtsLogWrap');
+  const log  = document.getElementById('manualPtsLog');
+  if(!manualPtsLog.length){ wrap.style.display='none'; return; }
+  wrap.style.display='block';
+  log.innerHTML = `<table class="data-table">
+    <thead><tr><th>المستخدم</th><th>النقاط</th><th>التاريخ</th><th>الحالة</th></tr></thead>
+    <tbody>
+      ${manualPtsLog.map(l=>`<tr>
+        <td style="color:var(--kick);font-weight:700;">${l.username}</td>
+        <td style="color:var(--kick);font-weight:700;">+${l.amount.toLocaleString()} نق</td>
+        <td style="color:var(--muted);font-size:12px;">${l.date}</td>
+        <td><span class="status-badge ${l.status==='تمت'?'s-done':'s-pending'}">${l.status==='تمت'?'✅ تمت':'⏳ '+l.status}</span></td>
+      </tr>`).join('')}
+    </tbody>
+  </table>`;
+}
+
+function renderUsersTable(){
+  const w=document.getElementById('usersTable');
+  if(!users.length){w.innerHTML='<div class="empty-state"><div class="empty-state-icon">👥</div><p>لا يوجد مستخدمون بعد</p></div>';return;}
+  w.innerHTML=`<table class="data-table"><thead><tr><th>اسم Kick</th><th>النقاط</th><th>تاريخ التسجيل</th></tr></thead><tbody>
+    ${users.map(u=>`<tr>
+      <td><a href="https://kick.com/${u.username}" target="_blank" style="color:var(--kick);font-weight:700;">${u.username}</a></td>
+      <td style="color:var(--kick);font-weight:700;">${u.points.toLocaleString()} نق</td>
+      <td style="color:var(--muted);font-size:12px;">${u.joined}</td>
+    </tr>`).join('')}
+  </tbody></table>`;
+}
+
+// ===== SETTINGS =====
+function saveSettings(){
+  const nm=document.getElementById('set-name').value.trim();
+  const kk=document.getElementById('set-kick').value.trim();
+  const bio=document.getElementById('set-bio').value.trim();
+  const spec=document.getElementById('set-spec').value.trim();
+  const sched=document.getElementById('set-sched').value.trim();
+  const country=document.getElementById('set-country').value.trim();
+  const discord=document.getElementById('set-discord').value.trim();
+  const twitter=document.getElementById('set-twitter').value.trim();
+  if(nm){document.getElementById('navName').textContent=nm;document.getElementById('aboutName').textContent=nm;document.getElementById('adminSideName').textContent=nm;}
+  if(kk){document.getElementById('aboutHandle').textContent=kk;document.getElementById('aboutKickTxt').textContent='kick.com/'+kk;document.getElementById('aboutKickLink').href='https://kick.com/'+kk;}
+  if(bio) document.getElementById('aboutBio').textContent=bio;
+  if(spec) document.getElementById('aboutSpec').textContent=spec;
+  if(sched) document.getElementById('aboutSched').textContent=sched;
+  if(country) document.getElementById('aboutCountry').textContent=country;
+  if(discord) document.getElementById('aboutDiscord').href=discord;
+  if(twitter) document.getElementById('aboutTwitter').href=twitter;
+  const np=document.getElementById('set-newpass').value.trim();
+  const cp=document.getElementById('set-confirmpass').value.trim();
+  if(np){if(np!==cp){toast('كلمتا السر غير متطابقتين','err');return;}adminPass=np;document.getElementById('set-newpass').value='';document.getElementById('set-confirmpass').value='';}
+  toast('✅ تم حفظ كل الإعدادات');
+}
+
+// ===== CHAT BUBBLE =====
+function toggleChat(){chatOpen=!chatOpen;document.getElementById('chatBox').classList.toggle('open',chatOpen);}
+function sendChat(){
+  const inp=document.getElementById('chatInput');
+  const msg=inp.value.trim();if(!msg)return;
+  const sender=document.getElementById('chatSenderName').value.trim()||'زائر';
+  const area=document.getElementById('chatMsgsArea');
+  area.innerHTML+=`<div class="chat-msg user-msg">${msg}</div>`;
+  inp.value='';area.scrollTop=area.scrollHeight;
+  if(!chats[sender])chats[sender]=[];
+  chats[sender].push({from:'user',text:msg,time:new Date().toLocaleTimeString('ar'),read:false});
+  document.getElementById('unreadBadge').style.display='inline';
+  setTimeout(()=>{
+    const r=['شكراً على تواصلك! سيرد الدعم قريباً 😊','تم استقبال رسالتك ✅','نحن هنا لمساعدتك!'];
+    const reply=r[Math.floor(Math.random()*r.length)];
+    area.innerHTML+=`<div class="chat-msg support">${reply}</div>`;
+    area.scrollTop=area.scrollHeight;
+    chats[sender].push({from:'admin',text:reply,time:new Date().toLocaleTimeString('ar'),read:true});
+  },1200);
+}
+
+// ===== UTILS =====
+function closeOverlay(id){document.getElementById(id).classList.add('hidden');}
+function toast(msg,type='ok'){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.style.background=type==='err'?'#ff4040':'var(--kick)';t.style.color=type==='err'?'#fff':'#000';
+  t.classList.add('visible');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('visible'),3500);
+}
+
+// close on bg click
+['adminModal','buyModal','productModal'].forEach(id=>{
+  document.getElementById(id).addEventListener('click',e=>{if(e.target.id===id)closeOverlay(id);});
+});
+document.getElementById('aPass').addEventListener('keydown',e=>{if(e.key==='Enter')submitAdmin();});
+document.getElementById('prodImgBox').addEventListener('click',e=>{
+  if(e.target!==document.getElementById('prodImgFile')) document.getElementById('prodImgFile').click();
+});
+
+renderStore();updateBadges();
+</script>
+</body>
+</html>
